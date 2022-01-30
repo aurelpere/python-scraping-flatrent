@@ -31,6 +31,9 @@ def listFiles(folder):
             b.append(i)
     return files
 
+def test_listFiles():
+    assert sorted(listFiles('/Users/macbook/github/scraping'))==['boxplot_scraping.png','README.md','scraping.py']
+
 
 header1 = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -121,6 +124,12 @@ def startvpn():
         + " --auth-user-pass /Users/macbook/Downloads/login.conf --verb 0"
     )
 
+def test_startvpn():
+    startvpn()
+    time.sleep(5)
+    output=os.popen('ps -r | grep openvpn').readlines()
+    assert re.search(output[0],'openvpn')==True
+
 
 def compute_avg_price(quartier):
     """
@@ -137,6 +146,7 @@ def compute_avg_price(quartier):
     surf_table = []
     base_url = "https://www.wg-gesucht.de/wohnungen-in-Berlin.8.2.1."
     page_nb = 0
+
     url_to_get = (
         base_url
         + "{}".format(page_nb)
@@ -206,8 +216,18 @@ def compute_avg_price(quartier):
     print(time_elapsed)
     return (price_table, surf_table)
 
+def test_compute_avg_price():
+    test_Kreuzberg=compute_avg_price('Kreuzberg')
+    assert type(test_Kreuzberg[0])==list
+    assert type(test_Kreuzberg[1])==list
+    assert len(test_Kreuzberg[0])==75
+    assert len(test_Kreuzberg[1])==75
+    intlist0=[s for s in test_Kreuzberg[0] if s.isdigit()]
+    intlist1=[s for s in test_Kreuzberg[1] if s.isdigit()]
+    assert len(intlist0)==75
+    assert len(intlist1)==75
 
-# Pandas
+    # Pandas
 if __name__ == "__main__":
     listdf = []
     for i in list_quartiers:
