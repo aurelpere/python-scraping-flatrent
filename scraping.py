@@ -14,7 +14,8 @@ import bs4
 import pandas as pd
 import requests
 
-header1 = {"Accept":
+header1 = {'Connection':'close',
+            "Accept":
             "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             "Accept-Encoding":
             "gzip, deflate, br",
@@ -34,7 +35,8 @@ header1 = {"Accept":
             "1",
             "User-Agent":
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:94.0) Gecko/20100101 Firefox/94.0",}
-header2 = {"Accept":
+header2 = {'Connection':'close',
+           "Accept":
             "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Encoding":
             "gzip, deflate, br",
@@ -45,7 +47,8 @@ header2 = {"Accept":
             "User-Agent":
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 \
              (KHTML, like Gecko) Version/15.1 Safari/605.1.15",}
-header3 = {"Accept":
+header3 = {'Connection':'close',
+           "Accept":
             "text/html,application/xhtml+xml,application/xml;q=0.9,image/\
              avif,image/webp,image/apng,*/*;q=0.8,application/\
              signed-exchange;v=b3;q=0.9",
@@ -143,7 +146,7 @@ class ScrapingBerlinRent():
 
     def __init__(self, neighborhoodlist, comparelist=False):
         "init"
-        self.neighborhoodlist = neighborhoodlist
+        self.neighborhoodlist = list(neighborhoodlist)
         if comparelist:
             for neighborhood in list_neighborhoods:
                 # pylint: disable=expression-not-assigned
@@ -171,6 +174,7 @@ class ScrapingBerlinRent():
     def end(self):
         "print end of scraping process"
         # TEMPS PASSE
+        self.page_nb = 0
         endtime = datetime.datetime.now()
         time_elapsed = str(endtime - self.start)
         print("\n")
@@ -213,8 +217,14 @@ class ScrapingBerlinRent():
             adapter = requests.adapters.HTTPAdapter(max_retries=retry)
             req.mount('http://', adapter)
             req.mount('https://', adapter)
-            response = req.get(url=self.url_to_get, headers=header,proxies=proxy)
+            req.headers['Connection'] = 'close'
+            try:
+                response = req.get(url=self.url_to_get, headers=header,proxies=proxy)
+            except Exception as err:
+                print (err)
+                print (f'proxy en question : {socks5}')
             (list1, list2) = Static.process_response(response)
+            req.close()
             if response.status_code == 200:
                 print(f"Page: {self.page_nb}")
                 self.process_lists(list1, list2)

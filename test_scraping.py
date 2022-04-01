@@ -5,10 +5,12 @@ this is test_scraping.py
 """
 import sys
 import io
+import matplotlib
 import matplotlib.pyplot as plt
 import requests
 from scraping import Static
 from scraping import ScrapingBerlinRent
+matplotlib.use("Agg")
 
 def test_process_response():
     "process response with bs4 from request call"
@@ -107,6 +109,7 @@ def test_compute():
     assert dftest.columns == ["Kreuzberg", "Charlottenburg", "Friedrichshain", "Mitte", "Neukölln",
                                 "Pankow", "Schöneberg", "Tempelhof"]
 
+@pytest.mark.filterwarnings("ignore:Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.:UserWarning")
 def test_plotdataframes():
     "test of plotdataframes function"
     test = ScrapingBerlinRent(['Kreuzberg'])
