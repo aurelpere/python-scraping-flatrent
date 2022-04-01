@@ -1,0 +1,13 @@
+pylint
+pytest
+pytest-cov
+yapf
+genbadge
+defusedxml
+pandas
+psutil
+matplotlib
+seaborn
+bs4
+requests
+pysocks

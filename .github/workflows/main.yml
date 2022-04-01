@@ -1,0 +1,37 @@
+name : Test-Lint-Format # Controls when the action will run. Triggers the workflow on push or pull request
+on: [push] # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs: # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest # The type of runner that the job will run on
+    steps: # Steps represent a sequence of tasks that will be executed as part of the job
+    - uses: actions/checkout@v2 # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: set up python 3.8 
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies # Runs commands using the runners shell
+      run: |
+        make install 
+    - name: Lint with pylint
+      run: |
+        make lint
+    - name: test with pytest
+      run: |
+        make test
+    - name : format with yapf
+      run: |
+        make format
+    - name: make a test coverage badge with genbadge
+      run: |
+        make coverage_badge
+    - name: clean pytest report
+      run: |
+        make cleaning
+    - name: Commit files # commit the badge file into the repository
+      run: |
+        make git
+    - name: Push changes # push the output file to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
