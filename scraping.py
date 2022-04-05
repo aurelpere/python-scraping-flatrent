@@ -246,7 +246,7 @@ class ScrapingBerlinRent():
             df0[neighborhood] = df0["prix"] / df0["surf"]
             df0 = df0.drop(["prix", "surf"], axis=1)
             listdf.append(df0)
-        result = pd.concat(listdf)
+        result = pd.concat(listdf,axis=1)
         result = result.rename_axis("pricem", axis=0)
         result = result.rename_axis("neighborhood", axis="columns")
         return result

@@ -104,20 +104,7 @@ def test_compute():
     "test of compute function"
     test = ScrapingBerlinRent(['Kreuzberg'],comparelist=True)
     dftest = test.compute()
-    assert dftest.column.name == 'pricem'
-    assert dftest.index.name == 'neighborhood'
-    assert len(dftest) == 75
-    assert dftest.columns == ["Kreuzberg", "Charlottenburg", "Friedrichshain", "Mitte",] #"Neukölln",
-                                #"Pankow", "Schöneberg", "Tempelhof"]
-# pylint: disable=undefined-variable
-@pytest.mark.filterwarnings("ignore:Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.:UserWarning")
-def test_plotdataframes():
-    "test of plotdataframes function"
-    test = ScrapingBerlinRent(['Kreuzberg'])
-    dftest = test.compute()
-    Static.plot_dataframes(dftest)
-    x_plot, y_plot = plt.gca().lines[0].get_xydata()  # get axis handle
-    print(x_plot)
-    print(y_plot)
-    assert len(x_plot) == 1
-    assert len(y_plot) == 75
+    assert dftest.index.name == 'pricem'
+    assert len(dftest) == 89
+    assert list(dftest.columns) == ["Kreuzberg", "Charlottenburg", "Friedrichshain", "Mitte", "Neukölln",
+                                "Pankow",]# "Schöneberg", "Tempelhof"]
