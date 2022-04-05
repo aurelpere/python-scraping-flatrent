@@ -6,11 +6,9 @@ this is test_scraping.py
 import sys
 import io
 import matplotlib
-import matplotlib.pyplot as plt
 import requests
 from scraping import Static
 from scraping import ScrapingBerlinRent
-import pytest
 matplotlib.use("Agg")
 
 def test_process_response():
