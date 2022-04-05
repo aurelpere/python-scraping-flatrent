@@ -3,6 +3,7 @@
 """
 this is scraping.py
 """
+import time
 import datetime
 import argparse
 import re
@@ -104,19 +105,20 @@ list_neighborhoods = ["Kreuzberg",
                         "Friedrichshain",
                         "Mitte",
                         "Neukölln",
-                        "Pankow",
-                        "Schöneberg",]
-# 'Tempelhof','Spandau,Wilmersdorf','Marzahn', 'Hellersdorf','Köpenick','Treptow',
+                        "Pankow",]
+
+# "Schöneberg", 'Tempelhof','Spandau,Wilmersdorf','Marzahn', 'Hellersdorf','Köpenick','Treptow',
 # 'Steglitz','Zehlendorf','Reinickendorf','Lichtenberg'
 
-listsocks5=['213.152.176.251',
-            '196.247.50.59',
-            '165.231.210.171',
-            '66.151.209.203',
-            '109.202.99.35',
-            '185.236.42.34',
-            '185.236.42.42',
-            '196.196.232.3',]
+listsocks5=['142.93.68.63','159.89.206.161']
+#['213.152.176.251',
+            #'196.247.50.59',
+            #'165.231.210.171',
+            #'66.151.209.203',
+            #'109.202.99.35',
+            #'185.236.42.34',
+            #'185.236.42.42',
+            #'196.196.232.3',]
 
 class Static():
     "static methods class"
@@ -203,14 +205,10 @@ class ScrapingBerlinRent():
         self.initialisation()
         # CRAWLING ET PARSEING
         while len(self.price_table) < 84:
-            with open('._','r',encoding='utf-8') as fileo:
-                credentials=fileo.readlines()
-                credentials0=credentials[0].strip("\n").strip(' ')
-                credentials1=credentials[1].strip("\n").strip(' ')
             header=random.choice(headerlist)
             socks5 = random.choice(listsocks5)
-            proxy = {'http': f'socks5h://{credentials0}:{credentials1}@{socks5}:1080',
-                       'https': f'socks5h://{credentials0}:{credentials1}@{socks5}:1080'}
+            proxy = {'http': f'socks5h://vpn:unlimited@{socks5}:2434',
+                       'https': f'socks5h://vpn:unlimited@{socks5}:2434'}
             req = requests.session()
             # pylint: disable=no-member
             retry = requests.packages.urllib3.util.retry.Retry(connect=3, backoff_factor=0.5)
@@ -220,9 +218,12 @@ class ScrapingBerlinRent():
             req.headers['Connection'] = 'close'
             try:
                 response = req.get(url=self.url_to_get, headers=header,proxies=proxy)
+                print (f'proxy  : {socks5}')
+                time.sleep(5)
             except Exception as err:
                 print (err)
                 print (f'proxy en question : {socks5}')
+
             (list1, list2) = Static.process_response(response)
             req.close()
             if response.status_code == 200:

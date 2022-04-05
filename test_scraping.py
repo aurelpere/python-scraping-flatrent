@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import requests
 from scraping import Static
 from scraping import ScrapingBerlinRent
+import pytest
 matplotlib.use("Agg")
 
 def test_process_response():
@@ -46,12 +47,12 @@ def test_classscrapingberlinrent():
                                         "Friedrichshain",
                                         "Mitte",
                                         "Neukölln",
-                                        "Pankow",
-                                        "Schöneberg",]
+                                        "Pankow",]
+                                        #"Schöneberg",]
     test3 = ScrapingBerlinRent(['Tempelhof'], True)
     assert test3.neighborhoodlist == [  "Tempelhof","Kreuzberg", "Charlottenburg",
                                         "Friedrichshain", "Mitte", "Neukölln",
-                                        "Pankow", "Schöneberg",]
+                                        "Pankow",] #"Schöneberg",]
 
 def test_initialisation():
     "test initialisation function"
@@ -106,9 +107,9 @@ def test_compute():
     assert dftest.column.name == 'pricem'
     assert dftest.index.name == 'neighborhood'
     assert len(dftest) == 75
-    assert dftest.columns == ["Kreuzberg", "Charlottenburg", "Friedrichshain", "Mitte", "Neukölln",
-                                "Pankow", "Schöneberg", "Tempelhof"]
-
+    assert dftest.columns == ["Kreuzberg", "Charlottenburg", "Friedrichshain", "Mitte",] #"Neukölln",
+                                #"Pankow", "Schöneberg", "Tempelhof"]
+# pylint: disable=undefined-variable
 @pytest.mark.filterwarnings("ignore:Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.:UserWarning")
 def test_plotdataframes():
     "test of plotdataframes function"
